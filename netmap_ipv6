@@ -1,0 +1,12 @@
+:foreach i in={"pppoe-ctcc"; "pppoe-cmcc"; "pppoe-cmcc2"} do={ 
+   :local IPADDR [/ipv6/dhcp-client/get $i prefix as-string];
+   :local IPPREFIX [:pick $IPADDR 0 [:find $IPADDR "," -1]];
+   :log info $IPPREFIX;
+   :local IPPREFIXAOLD [/ipv6/firewall/nat/get value-name=to-address [find out-interface="$i"]];
+   :if ($IPPREFIX = $IPPREFIXAOLD) do={
+       :log info "the netmap $i not change";
+   } else={
+       /ipv6/firewall/nat/set to-address=$IPPREFIXA [find chain=srcnat action=netmap out-interface="$i"];
+       :log info "netmap %i finish";
+   }
+}
