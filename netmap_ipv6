@@ -1,4 +1,4 @@
-:foreach i in={"pppoe-ctcc"; "pppoe-cmcc"; "pppoe-cmcc2"} do={ 
+:foreach i in={"#pppoe1"; "#pppoe2"; "#pppoe3"} do={ 
    :local IPADDR [/ipv6/dhcp-client/get $i prefix as-string];
    :local IPPREFIX [:pick $IPADDR 0 [:find $IPADDR "," -1]];
    :log info $IPPREFIX;
