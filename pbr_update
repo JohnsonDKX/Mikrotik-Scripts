@@ -1,0 +1,24 @@
+:foreach i in={"#pppoe1"; "#pppoe2"; "#pppoe3"} do={
+   :local IPADDR [/ip/address/get value-name=address [find interface="$i"]];
+   :local IPADDRFIX [:pick $IPADDR 0 [:find $IPADDR "/" -1]];
+   :log info $IPADDRFIX;
+   :local IPADDROLD [/routing/rule/get value-name=src-address [find comment="$i"]];
+   :local IPADDRFIXOLD [:pick $IPADDROLD 0 [:find $IPADDROLD "/" -1]];
+   :local POOL [:pick $i 6 11]
+   :local IP6ADDR [/ipv6/address/get value-name=address [find from-pool="$POOL"]];
+   :local IP6ADDRFIX [:pick $IP6ADDR 0 [:find $IP6ADDR "/" -1]];
+   :log info $IP6ADDRFIX;
+   :local IP6ADDROLD [/routing/rule/get value-name=src-address [find comment=($i . "-v6")]];
+   :local IP6ADDROLDFIX [:pick $IP6ADDROLD 0 [:find $IP6ADDROLD "/" -1]];
+   if ($IPADDRFIX = $IPADDRFIXOLD) do={
+      :log info "the rule $i not change";
+   } else={
+      /routing/rule/set src-address="$IPADDRFIX" [find comment="$i"];
+      :log info "rule address $i finish";
+   }
+   if ($IP6ADDRFIX = $IP6ADDROLDFIX) do={
+      :log info "the rule $i v6 not change"
+   } else={
+      /routing/rule/set src-address="$IP6ADDRFIX" [find comment=($i . "-v6")];
+   }
+}
