@@ -7,6 +7,9 @@ netmap_ipv6
 rule_update
 对于多线路，使用rouing/rule设置routeros源进源出，使用脚本替换规则的公网地址
 ------------------------------------------------------------------------
+check_ip
+电信精品网指定拨号58.32开头脚本
+------------------------------------------------------------------------
 Cloudfalre DDNS Update Scripts form:
 https://github.com/dudanov/mikrotik-cloudflare-ddns-scripts/tree/master
 ------------------------------------------------------------------------
