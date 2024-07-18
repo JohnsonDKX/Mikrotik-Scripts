@@ -6,7 +6,7 @@
    :if ($IPPREFIX = $IPPREFIXAOLD) do={
        :log info "the netmap $i not change";
    } else={
-       /ipv6/firewall/nat/set to-address=$IPPREFIXA [find chain=srcnat action=netmap out-interface="$i"];
-       :log info "netmap %i finish";
+       /ipv6/firewall/nat/set to-address=$IPPREFIXA [find chain=srcnat action=netmap out-interface="$i"]];
+       :log info "netmap $i finish";
    }
 }
