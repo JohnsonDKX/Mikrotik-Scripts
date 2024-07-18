@@ -1,0 +1,23 @@
+:global adslinter "pppoe-ctcc";
+:global matchip "58.32";
+:global adslipfix [/ip/address/get value-name=address [find interface="pppoe-ctcc"]];
+:global adslip [:pick $adslipfix 0 [:len $matchip]];
+:if (:len [/interface/find name=$adslinter] = 0) do={
+   :log info "CheckIP: No interface named $adslinterface, please check configuration"
+} else={
+    :if ([:typeof $adslip] = "nothing") do={
+      :log info ("CheckIP: No ip address present on " . $adslinter . ", please check.") 
+    } else={
+	    :if ($adslip = $matchip) do={
+	      :log info ("current ip address" . $adslipfix . ", please not to change ip")
+	    } else={
+	        :while ($adslip != $matchip) do={
+	           /interface disable $adslinter
+	           /interface enable $adslinter
+	           :delay 5
+	           :global adslipfix [/ip/address/get value-name=address [find interface="pppoe-ctcc"]];
+	           :global adslip [:pick $adslipfix 0 [:len $matchip]];
+	        }
+        }
+    }
+}
